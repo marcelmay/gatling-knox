@@ -6,7 +6,7 @@ Gatling DSL support for Apache Kafka
 Features
 --------
 
-GatlingKnox provides a DSL for Apache Knox load testing via [Knox Shell](https://cwiki.apache.org/confluence/display/KNOX/Client+Usage).
+GatlingKnox provides a DSL for load testing Apache Knox via [Knox Shell](https://cwiki.apache.org/confluence/display/KNOX/Client+Usage).
 
 Here is a simple example:
 ```
@@ -16,20 +16,13 @@ class BasicSimulation extends Simulation {
 
   // Cleanup and initialize a tmp. HDFS base directory
   val hdfsBenchmarkDir = "/tmp/benchmark-gatling"
-  try {
-    if (Hdfs.status(knoxConf.hadoop).file(hdfsBenchmarkDir).now().exists()) {
-      Hdfs.rm(knoxConf.hadoop).file(hdfsBenchmarkDir).recursive().now()
-    }
-  } catch {
-    case _: HadoopException => println("No cleanup, base dir does not exist")
-  }
-  Hdfs.mkdir(knoxConf.hadoop).dir(hdfsBenchmarkDir).now()
+  ...
 
-  // Scenario
-  val scn = scenario("Knox Test")
+  // Define load test scenario
+  val scn = scenario("Knox Load Test")
     .exec(
       knox("upload 100KiB file") { hadoop: Hadoop =>
-        // Use Knox Shell here
+        // Use any Knox Shell command ...
         Hdfs.put(hadoop)
           .file("src/test/resources/data/100KiB.blob")
           .to(hdfsBenchmarkDir + "/100KiB-" + random.nextInt(Integer.MAX_VALUE) + ".blob")
@@ -39,6 +32,12 @@ class BasicSimulation extends Simulation {
     .protocols(knoxConf)
 }
 ```
+
+## Building
+
+```mvn clean install```
+
+Requires Maven 3.5.x for building.
 
 ## License
 
