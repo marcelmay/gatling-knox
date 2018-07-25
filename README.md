@@ -1,7 +1,7 @@
 GatlingKnox
 ===========
 
-Gatling DSL support for Apache Kafka
+Gatling DSL support for Apache Knox
 
 Features
 --------
@@ -10,7 +10,7 @@ GatlingKnox provides a DSL for load testing Apache Knox via [Knox Shell](https:/
 
 Here is a simple example:
 ```
-class BasicSimulation extends Simulation {
+class de.m3y.gatling.knox.BasicSimulation extends Simulation {
   val knoxConf = KnoxProtocol("https://localhost/gateway/default", "some user", "some pwd")
   val random = new Random()
 
